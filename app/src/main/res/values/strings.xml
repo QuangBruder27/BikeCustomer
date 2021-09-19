@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">BikeCustomer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Log out</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_rent">Rent</string>
+    <string name="menu_report">Report</string>
+
+
+    <string name="google_maps_key">AIzaSyDCl2jWQ63OJiLBeB5mgaKCWpi04xoyPqQ</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_sign_in">Register</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+</resources>

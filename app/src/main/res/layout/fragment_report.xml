@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".ui.report.ReportFragment">
+
+    <EditText
+        android:hint="Bike Id"
+        android:id="@+id/reportBike"
+        android:textSize="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <EditText
+        android:id="@+id/reportNote"
+        android:layout_below="@id/reportBike"
+        android:gravity="top"
+        android:textSize="20dp"
+        android:hint="Note"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"/>
+
+    <Button
+        android:id="@+id/chooseFile"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Choose image"/>
+
+    <ImageView
+        android:id="@+id/imgView"
+        android:layout_below="@id/chooseFile"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_centerHorizontal="true"
+        android:src="@color/white" />
+
+    <Button
+        android:id="@+id/reportSend"
+        android:layout_below="@id/imgView"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send a report"/>
+
+    <ProgressBar
+        android:id="@+id/reportLoading"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/chooseFile"
+        android:visibility="invisible" />
+
+</RelativeLayout>

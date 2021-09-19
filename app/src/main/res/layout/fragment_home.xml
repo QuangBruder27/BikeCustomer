@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    tools:context=".ui.home.HomeFragment">
+
+    <TextView
+        android:id="@+id/tvGreeting"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:text="Hello"
+        android:textSize="35dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/tvScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvGreeting"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="Bonus: 0"
+        android:textColor="#DD1D1D"
+        android:textSize="30dp" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="20dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/imgAvatar"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/avabike"
+        app:civ_border_width="2dp"
+        app:civ_border_color="#FF000000"/>
+
+    <TextView
+        android:id="@+id/currentbike"
+        android:layout_margin="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imgAvatar"
+        android:layout_centerInParent="true"
+        android:text="Current Bike"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/tvBikeId"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/currentbike"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Bike: B001"
+        android:textColor="#3F51B5"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/tvBikePin"
+        android:visibility="invisible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvBikeId"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Pin: 1234"
+        android:textColor="#E91E63"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/tvNoBike"
+        android:layout_margin="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/currentbike"
+        android:layout_centerInParent="true"
+        android:text="No bike rented"
+        android:textColor="#E91E63"
+        android:textSize="30dp" />
+
+</RelativeLayout>
