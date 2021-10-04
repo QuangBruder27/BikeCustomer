@@ -3,9 +3,14 @@ package com.quangbruder.bikecustomer.help;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.preference.PreferenceManager;
 
 import com.quangbruder.bikecustomer.data.model.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -104,6 +109,18 @@ public class Helper {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String pin = preferences.getString("RentPin", null);
         return pin;
+    }
+
+    public static User createUserFromJSON(JSONObject jsonObject) throws JSONException {
+        User result = new User();
+        result.setName(jsonObject.getString("name"));
+        result.setUserId(jsonObject.getString("customerId"));
+        return result;
+    }
+
+    public static Bitmap rescaleBitMap(int id, Context context){
+        BitmapDrawable bitmapdraw = (BitmapDrawable) context.getResources().getDrawable(id);
+        return Bitmap.createScaledBitmap(bitmapdraw.getBitmap(),200,200,false);
     }
 
 

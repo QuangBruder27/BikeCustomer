@@ -39,20 +39,13 @@ import java.util.Map;
  */
 public class HistoryFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
+    List<Booking> listOfBooking;
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+
     public HistoryFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
     public static HistoryFragment newInstance(int columnCount) {
         HistoryFragment fragment = new HistoryFragment();
         Bundle args = new Bundle();
@@ -64,9 +57,6 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     RecyclerView recyclerView;
@@ -105,7 +95,12 @@ public class HistoryFragment extends Fragment {
         return result;
     }
 
-    List<Booking> listOfBooking;
+    public void updateUI(JSONArray response) throws JSONException {
+        listOfBooking = createListOfBookingFromJSonArray(response);
+        recyclerView.setAdapter(new BookingListAdapter(listOfBooking));
+    }
+
+    // Send GET Request to get all bookings
     public void getBookingList(){
         System.out.println("user before sendReport: "+retrieveUserInfo(getContext()));
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
@@ -116,8 +111,7 @@ public class HistoryFragment extends Fragment {
                     public void onResponse(JSONArray response) {
                         System.out.println("Response: "+response);
                         try {
-                            listOfBooking = createListOfBookingFromJSonArray(response);
-                            recyclerView.setAdapter(new BookingListAdapter(listOfBooking));
+                            updateUI(response);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

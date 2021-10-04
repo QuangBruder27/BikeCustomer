@@ -148,7 +148,7 @@ public class ReportFragment extends Fragment {
 
     }
 
-
+    // Send POST Request to create the report
     public void sendReport(String bikeId, String note){
         System.out.println("user before sendReport: "+retrieveUserInfo(getContext()));
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
@@ -174,8 +174,8 @@ public class ReportFragment extends Fragment {
                                 progressBar.setVisibility(View.INVISIBLE);
                             }
 
-                            Toast.makeText(getContext(), "Thanks for reporting the defect.\n" +
-                                    "You get 10 points", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Thanks for reporting the defect.",
+                                    Toast.LENGTH_LONG).show();
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -200,6 +200,7 @@ public class ReportFragment extends Fragment {
         requestQueue.add(request);
     }
 
+    // Send PUT Request upload image
     public void uploadImage(Bitmap bitmap,String reportId){
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         Map<String, String> headers = new HashMap<>();
@@ -211,10 +212,13 @@ public class ReportFragment extends Fragment {
                     public void onResponse(NetworkResponse response) {
                         System.out.println("Response for upload image: "+response);
                         System.out.println("Status: "+response.statusCode);
+                        /*
                         if (response.statusCode==201){
                             Toast.makeText(getContext(), "Thanks for reporting the defect.\n" +
                                     "You get 20 points", Toast.LENGTH_LONG).show();
                         }
+
+                         */
                         progressBar.setVisibility(View.INVISIBLE);
                     }
                 },
@@ -240,7 +244,6 @@ public class ReportFragment extends Fragment {
 
         requestQueue.add(request);
     }
-
 
 
 

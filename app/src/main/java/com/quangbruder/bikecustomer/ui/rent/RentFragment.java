@@ -67,6 +67,7 @@ import com.quangbruder.bikecustomer.data.model.Bike;
 import com.quangbruder.bikecustomer.data.model.URLs;
 import com.quangbruder.bikecustomer.databinding.FragmentRentBinding;
 import com.quangbruder.bikecustomer.help.CustomArrayRequest;
+import com.quangbruder.bikecustomer.help.Helper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,12 +87,13 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
     private static final String TAG ="TAG";
     //private RentViewModel rentViewModel;
     private FragmentRentBinding binding;
+    private List<Polyline> polylines=null;
 
     private GoogleMap map;
     private Location currentLocation;
-    private CameraPosition cameraPosition;
-    private static final String KEY_CAMERA_POSITION = "camera_position";
-    private static final String KEY_LOCATION = "location";
+    //private CameraPosition cameraPosition;
+    //private static final String KEY_CAMERA_POSITION = "camera_position";
+    //private static final String KEY_LOCATION = "location";
 
     private PlacesClient placesClient;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -120,7 +122,7 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         */
 
         // Construct a PlacesClient
-        Places.initialize(getContext(), "AIzaSyDCl2jWQ63OJiLBeB5mgaKCWpi04xoyPqQ");
+        Places.initialize(getContext(), getString(R.string.google_maps_key));
         placesClient = Places.createClient(getContext());
 
         // Construct a FusedLocationProviderClient.
@@ -144,29 +146,22 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
-
         map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
             public boolean onMyLocationButtonClick() {
                 // Turn on the My Location layer and the related control on the map.
                 updateLocationUI();
-
                 // Get the current location of the device and set the position of the map.
                 getDeviceLocation();
-
                 mapListener();
                 return false;
             }
         });
-
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
-
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
-
         mapListener();
-
     }
 
     public void mapListener(){
@@ -189,20 +184,26 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         });
     }
 
-    // function to find Routes.
-    public void findRoutes(LatLng Start, LatLng End) {
-        if(Start==null || End==null) {
+    //-------------------------------------------------------------------------
+    // find Routes by Using Google-Direction-Android
+    public void findRoutes(LatLng Begin, LatLng End) {
+        if(Begin==null || End==null) {
             Toast.makeText(getContext(),"Unable to get location", Toast.LENGTH_LONG).show();
         } else {
             Routing routing = new Routing.Builder()
                     .travelMode(AbstractRouting.TravelMode.WALKING)
                     .withListener(this)
                     .alternativeRoutes(true)
-                    .waypoints(Start, End)
-                    .key("AIzaSyDCl2jWQ63OJiLBeB5mgaKCWpi04xoyPqQ")  //also define your api key here.
+                    .waypoints(Begin, End)
+                    .key(getString(R.string.google_maps_key)) 
                     .build();
             routing.execute();
         }
+    }
+
+    @Override
+    public void onRoutingCancelled() {
+        //System.out.println("Routing cancel-------------------");
     }
 
     @Override
@@ -216,10 +217,7 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
     @Override
     public void onRoutingStart() {
         System.out.println("Finding Routing-----------------------------------");
-
     }
-
-    private List<Polyline> polylines=null;
 
     @Override
     public void onRoutingSuccess(ArrayList<Route> routes, int shortestRouteIndex) {
@@ -257,15 +255,12 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         }
     }
 
-    @Override
-    public void onRoutingCancelled() {
-        System.out.println("Routing cancel-------------------");
-    }
 
-    public Bitmap rescaleBitMap(int id){
-        BitmapDrawable bitmapdraw = (BitmapDrawable) getResources().getDrawable(id);
-        return Bitmap.createScaledBitmap(bitmapdraw.getBitmap(),200,200,false);
-    }
+
+
+
+    //------------------------------------------------------------------------------------
+
 
     public static Map<String,String> createParametersGetBikeLocation(String latitude, String longtitude){
         Map<String, String> result = new HashMap<String, String>();
@@ -274,6 +269,7 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         return result;
     }
 
+    // Send POST Request to get bikes nearby
     public void getBikeLocations(Map<String, String> params, Context context){
         System.out.println("getBikeLocations Func");
         System.out.println("Parameter:"+params.size()+", "+params.toString());
@@ -314,6 +310,7 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         requestQueue.add(request);
     }
 
+    // Send POST Request to create the booking for rent a bike
     public void rentBike(String bikeId, String customerId, Context context){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JSONObject jsonObject = new JSONObject();
@@ -337,12 +334,8 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.statusCode==406) {
-                    Toast.makeText(getContext(), "You can only reserve one bike", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Please try again", Toast.LENGTH_SHORT).show();
-                }
                 System.out.println("Error: "+error);
+                Toast.makeText(getContext(), "Please try again", Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
@@ -397,7 +390,7 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         System.out.println("CREATE MARKER: "+latitude+", "+longtitude);
         return new MarkerOptions().title("Bike: "+bikeId)
                 .position(new LatLng(Double.valueOf(latitude), Double.valueOf(longtitude)))
-                .icon(BitmapDescriptorFactory.fromBitmap(rescaleBitMap(R.drawable.bike)));
+                .icon(BitmapDescriptorFactory.fromBitmap(Helper.rescaleBitMap(R.drawable.bike,getContext())));
     }
 
 
@@ -411,7 +404,7 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
     }
 
     /**
-     * Gets the current location of the device, and positions the map's camera.
+     * Gets the current location of the user, and positions the map's camera.
      */
     // [START maps_current_place_get_device_location]
     private void getDeviceLocation() {

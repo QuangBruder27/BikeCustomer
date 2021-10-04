@@ -1,6 +1,7 @@
 package com.quangbruder.bikecustomer.ui.login;
 
 
+import static com.quangbruder.bikecustomer.help.Helper.createUserFromJSON;
 import static com.quangbruder.bikecustomer.help.Helper.retrieveUserInfo;
 import static com.quangbruder.bikecustomer.help.Helper.storeToken;
 import static com.quangbruder.bikecustomer.help.Helper.storeUserInfo;
@@ -25,6 +26,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.common.hash.Hashing;
 import com.quangbruder.bikecustomer.MainActivity;
 import com.quangbruder.bikecustomer.data.model.URLs;
 import com.quangbruder.bikecustomer.data.model.User;
@@ -32,6 +34,8 @@ import com.quangbruder.bikecustomer.databinding.ActivityLoginBinding;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -99,12 +103,32 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    public String hashPassword(String password){
+        System.out.println("old password: "+password);
+        String hashed = Hashing.sha256()
+                .hashString(password, StandardCharsets.UTF_8)
+                .toString();
+        System.out.println("Hashing: "+hashed);
+        return hashed;
+    }
+
+    public void setUIAfterRegister(JSONObject response, User user, Context context) throws JSONException {
+        User loginUser = createUserFromJSON(response);
+        loginUser.setEmail(user.getEmail());
+        loginUser.setPassword(user.getPassword());
+        System.out.println("loginUser: ");
+        storeUserInfo(context,loginUser);
+        System.out.println("Retrieve user: "+retrieveUserInfo(context));
+        storeToken(context,response.getString("token"));
+    }
+
+    // SEND Post Request to Register
     public void postRegister(User user, Context context) throws JSONException {
         System.out.println("postRegister Func: "+user);
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JSONObject object = new JSONObject();
         object.put("email",user.getEmail());
-        object.put("password",user.getPassword());
+        object.put("password",hashPassword(user.getPassword()));
         object.put("name",user.getName());
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URLs.URL_REGISTER, object, new Response.Listener<JSONObject>() {
@@ -112,13 +136,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 System.out.println("RESPONSEin postRegister: "+response.toString());
                 try {
-                    User loginUser = createUserFromJSON(response);
-                    loginUser.setEmail(user.getEmail());
-                    loginUser.setPassword(user.getPassword());
-                    System.out.println("loginUser: ");
-                    storeUserInfo(context,loginUser);
-                    System.out.println("Retrieve user: "+retrieveUserInfo(context));
-                    storeToken(context,response.getString("token"));
+                    setUIAfterRegister(response,user,context);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -141,26 +159,31 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue.add(request);
     }
 
+
+    public void setUIAfterLogin(JSONObject response, User user,Context context) throws JSONException {
+        User loginUser = createUserFromJSON(response);
+        loginUser.setEmail(user.getEmail());
+        loginUser.setPassword(user.getPassword());
+        System.out.println("loginUser: ");
+        storeUserInfo(context,loginUser);
+        System.out.println("Retrieve user: "+retrieveUserInfo(context));
+        storeToken(context,response.getString("token"));
+    }
+
+    // SEND Post Request to Login
     public void postLogIn(User user, Context context) throws JSONException {
         System.out.println("postLogIn Func");
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JSONObject object = new JSONObject();
         object.put("email",user.getEmail());
-        object.put("password",user.getPassword());
+        object.put("password",hashPassword(user.getPassword()));
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, URLs.URL_LOGIN, object, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 System.out.println("RESPONSE in postLogIn: "+response.toString());
-
                 try {
-                    User loginUser = createUserFromJSON(response);
-                    loginUser.setEmail(user.getEmail());
-                    loginUser.setPassword(user.getPassword());
-                    System.out.println("loginUser: ");
-                    storeUserInfo(context,loginUser);
-                    System.out.println("Retrieve user: "+retrieveUserInfo(context));
-                    storeToken(context,response.getString("token"));
+                    setUIAfterLogin(response,user,context);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -177,12 +200,7 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue.add(request);
     }
 
-    public User createUserFromJSON(JSONObject jsonObject) throws JSONException{
-        User result = new User();
-        result.setName(jsonObject.getString("name"));
-        result.setUserId(jsonObject.getString("customerId"));
-        return result;
-    }
+
 
     private void showLoginFailed(VolleyError error) {
         System.out.println("Login fails:");

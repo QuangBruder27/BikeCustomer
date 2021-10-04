@@ -237,16 +237,6 @@ public class MainActivity extends AppCompatActivity {
         //updateUIAfterPermissionRequest();
     }
 
-    private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", okListener)
-                .create()
-                .show();
-    }
-
-
 
 
     /**

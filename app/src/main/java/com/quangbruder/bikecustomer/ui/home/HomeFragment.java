@@ -57,7 +57,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     CircleImageView circleImageView;
     ObjectAnimator anim;
@@ -65,8 +64,6 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -92,7 +89,7 @@ public class HomeFragment extends Fragment {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 if(motionEvent.getAction()==MotionEvent.ACTION_DOWN){
                     Toast.makeText(getContext(), "Refresh", Toast.LENGTH_SHORT).show();
-                    updateUI(getContext());
+                    sendRequestToUpdateUI();
                 }
                 return true;
             }
@@ -104,10 +101,16 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        updateUI(getContext());
+        sendRequestToUpdateUI();
     }
 
-    public void updateUI(Context context){
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    public void sendRequestToUpdateUI(){
         getBonusScore();
         getCurrentBooking();
     }
@@ -135,13 +138,12 @@ public class HomeFragment extends Fragment {
         anim.start();
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
+
+    public void setTextViewBonusScore(String text){
+        tvBonusScore.setText(text);
     }
 
-    // SEND GET REQUEST TO bonus service
+    // Send GET Request TO get bonus score
     public void getBonusScore(){
             // Instantiate the RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(getContext());
@@ -153,7 +155,7 @@ public class HomeFragment extends Fragment {
                         public void onResponse(String response) {
                             // Display the response.
                             System.out.println("Response is: "+ response);
-                            tvBonusScore.setText("Bonus: "+response);
+                            setTextViewBonusScore("Bonus: "+response);
                         }
                     }, new Response.ErrorListener() {
                 @Override
@@ -175,6 +177,32 @@ public class HomeFragment extends Fragment {
             queue.add(stringRequest);
     }
 
+
+
+    public void setUI(JSONObject response) throws JSONException {
+        if (response.getString("bikeId").equals(retrieveRentBike(getContext()))){
+            tvBikeId.setText("Bike: "+retrieveRentBike(getContext()));
+            tvBikePin.setText("Pin: "+retrieveRentPin(getContext()));
+            tvBikeId.setVisibility(View.VISIBLE);
+            tvBikePin.setVisibility(View.VISIBLE);
+            tvNoBike.setVisibility(View.INVISIBLE);
+            rotation();
+        } else {
+            if (anim!= null) anim.cancel();
+            tvBikeId.setVisibility(View.INVISIBLE);
+            tvBikePin.setVisibility(View.INVISIBLE);
+            tvNoBike.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setUIByError(){
+        if (anim!= null) anim.cancel();
+        tvBikeId.setVisibility(View.INVISIBLE);
+        tvBikePin.setVisibility(View.INVISIBLE);
+        tvNoBike.setVisibility(View.VISIBLE);
+    }
+
+    //Send GET Request to get the current booking
     public void getCurrentBooking(){
         System.out.println("GET Current booking func");
         User user = retrieveUserInfo(getContext());
@@ -188,21 +216,7 @@ public class HomeFragment extends Fragment {
                     public void onResponse(JSONObject response) {
                         System.out.println("Response in getCurrentBooking: "+response);
                         try {
-                            if (response.getString("bikeId").equals(retrieveRentBike(getContext()))){
-                                    tvBikeId.setText("Bike: "+retrieveRentBike(getContext()));
-                                    tvBikePin.setText("Pin: "+retrieveRentPin(getContext()));
-                                    tvBikeId.setVisibility(View.VISIBLE);
-                                    tvBikePin.setVisibility(View.VISIBLE);
-                                    tvNoBike.setVisibility(View.INVISIBLE);
-                                    rotation();
-                                } else {
-                                    if (anim!= null) anim.cancel();
-                                    tvBikeId.setVisibility(View.INVISIBLE);
-                                    tvBikePin.setVisibility(View.INVISIBLE);
-                                    tvNoBike.setVisibility(View.VISIBLE);
-
-
-                            }
+                            setUI(response);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -212,10 +226,7 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         System.out.println("Eror in getCurrentBooking: "+ error);
-                        if (anim!= null) anim.cancel();
-                        tvBikeId.setVisibility(View.INVISIBLE);
-                        tvBikePin.setVisibility(View.INVISIBLE);
-                        tvNoBike.setVisibility(View.VISIBLE);
+                        setUIByError();
                     }
                 }){
 
@@ -226,9 +237,7 @@ public class HomeFragment extends Fragment {
                 return headers;
             }
         };
-
         requestQueue.add(request);
-
     }
 
 
