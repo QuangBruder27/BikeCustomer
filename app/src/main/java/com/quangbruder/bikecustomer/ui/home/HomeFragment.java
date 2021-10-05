@@ -143,7 +143,9 @@ public class HomeFragment extends Fragment {
         tvBonusScore.setText(text);
     }
 
-    // Send GET Request TO get bonus score
+    /**
+     * Send GET Request TO get bonus score
+     */
     public void getBonusScore(){
             // Instantiate the RequestQueue.
             RequestQueue queue = Volley.newRequestQueue(getContext());
@@ -177,8 +179,11 @@ public class HomeFragment extends Fragment {
             queue.add(stringRequest);
     }
 
-
-
+    /**
+     * set user interface
+     * @param response
+     * @throws JSONException
+     */
     public void setUI(JSONObject response) throws JSONException {
         if (response.getString("bikeId").equals(retrieveRentBike(getContext()))){
             tvBikeId.setText("Bike: "+retrieveRentBike(getContext()));
@@ -195,6 +200,9 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    /**
+     * set user interface by error
+     */
     public void setUIByError(){
         if (anim!= null) anim.cancel();
         tvBikeId.setVisibility(View.INVISIBLE);
@@ -202,7 +210,9 @@ public class HomeFragment extends Fragment {
         tvNoBike.setVisibility(View.VISIBLE);
     }
 
-    //Send GET Request to get the current booking
+    /**
+     * Send GET Request to get the current booking
+     */
     public void getCurrentBooking(){
         System.out.println("GET Current booking func");
         User user = retrieveUserInfo(getContext());

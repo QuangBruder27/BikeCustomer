@@ -8,10 +8,6 @@ public class URLs {
     public static final String locationService = "8500";
 
 
-    //private static final String base = "http://192.168.0.102:";
-    //private static final String base = "http://192.168.0.101:";
-
-
     //private static final String baseGATEWAY = "http://192.168.0.101:8762";
     private static final String baseGATEWAY = "http://178.254.24.192:8762";
 

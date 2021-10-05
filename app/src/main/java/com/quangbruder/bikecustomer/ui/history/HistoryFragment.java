@@ -78,6 +78,12 @@ public class HistoryFragment extends Fragment {
     }
 
 
+    /**
+     * Create a list of booking from the array of JSON Object
+     * @param jsonArray
+     * @return
+     * @throws JSONException
+     */
     public List<Booking> createListOfBookingFromJSonArray(JSONArray jsonArray) throws JSONException {
         List<Booking> result = new ArrayList<>();
         for (int a = 0; a < jsonArray.length(); a++) {
@@ -95,12 +101,19 @@ public class HistoryFragment extends Fragment {
         return result;
     }
 
+    /**
+     * update user interface
+     * @param response
+     * @throws JSONException
+     */
     public void updateUI(JSONArray response) throws JSONException {
         listOfBooking = createListOfBookingFromJSonArray(response);
         recyclerView.setAdapter(new BookingListAdapter(listOfBooking));
     }
 
-    // Send GET Request to get all bookings
+    /**
+     * Send GET Request to get all bookings
+     */
     public void getBookingList(){
         System.out.println("user before sendReport: "+retrieveUserInfo(getContext()));
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());

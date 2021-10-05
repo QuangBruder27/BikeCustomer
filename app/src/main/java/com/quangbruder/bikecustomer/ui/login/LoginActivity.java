@@ -72,8 +72,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +101,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * hash the password
+     * @param password
+     * @return
+     */
     public String hashPassword(String password){
         System.out.println("old password: "+password);
         String hashed = Hashing.sha256()
@@ -112,6 +115,13 @@ public class LoginActivity extends AppCompatActivity {
         return hashed;
     }
 
+    /**
+     * set user interface after successful registration
+     * @param response
+     * @param user
+     * @param context
+     * @throws JSONException
+     */
     public void setUIAfterRegister(JSONObject response, User user, Context context) throws JSONException {
         User loginUser = createUserFromJSON(response);
         loginUser.setEmail(user.getEmail());
@@ -122,7 +132,12 @@ public class LoginActivity extends AppCompatActivity {
         storeToken(context,response.getString("token"));
     }
 
-    // SEND Post Request to Register
+    /**
+     * SEND Post Request to register a new account
+     * @param user
+     * @param context
+     * @throws JSONException
+     */
     public void postRegister(User user, Context context) throws JSONException {
         System.out.println("postRegister Func: "+user);
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -159,7 +174,13 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue.add(request);
     }
 
-
+    /**
+     * set user interface after  successful login
+     * @param response
+     * @param user
+     * @param context
+     * @throws JSONException
+     */
     public void setUIAfterLogin(JSONObject response, User user,Context context) throws JSONException {
         User loginUser = createUserFromJSON(response);
         loginUser.setEmail(user.getEmail());
@@ -170,7 +191,12 @@ public class LoginActivity extends AppCompatActivity {
         storeToken(context,response.getString("token"));
     }
 
-    // SEND Post Request to Login
+    /**
+     * SEND Post Request to login
+     * @param user
+     * @param context
+     * @throws JSONException
+     */
     public void postLogIn(User user, Context context) throws JSONException {
         System.out.println("postLogIn Func");
         RequestQueue requestQueue = Volley.newRequestQueue(context);
@@ -200,8 +226,10 @@ public class LoginActivity extends AppCompatActivity {
         requestQueue.add(request);
     }
 
-
-
+    /**
+     * show toast in case of incorrect registration
+     * @param error
+     */
     private void showLoginFailed(VolleyError error) {
         System.out.println("Login fails:");
         loadingProgressBar.setVisibility(View.INVISIBLE);

@@ -104,6 +104,10 @@ public class ReportFragment extends Fragment {
 
 
     private static final int PICK_IMAGE_REQUEST =1 ;
+
+    /**
+     * choose a image from the storage
+     */
     private void fileChoosing() {
         System.out.println("Func file choosing");
         //checkPermission();
@@ -148,7 +152,11 @@ public class ReportFragment extends Fragment {
 
     }
 
-    // Send POST Request to create the report
+    /**
+     * Send POST Request to create the report
+     * @param bikeId
+     * @param note
+     */
     public void sendReport(String bikeId, String note){
         System.out.println("user before sendReport: "+retrieveUserInfo(getContext()));
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
@@ -200,7 +208,11 @@ public class ReportFragment extends Fragment {
         requestQueue.add(request);
     }
 
-    // Send PUT Request upload image
+    /**
+     * Send PUT Request upload  the image
+     * @param bitmap
+     * @param reportId
+     */
     public void uploadImage(Bitmap bitmap,String reportId){
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         Map<String, String> headers = new HashMap<>();
@@ -245,8 +257,11 @@ public class ReportFragment extends Fragment {
         requestQueue.add(request);
     }
 
-
-
+    /**
+     * set path from Uri to String
+      * @param uri
+     * @return
+     */
     public String getPath(Uri uri) {
         Cursor cursor = getContext().getContentResolver().query(uri, null, null, null, null);
         cursor.moveToFirst();
@@ -264,6 +279,11 @@ public class ReportFragment extends Fragment {
         return path;
     }
 
+    /**
+     * convert the bitmap to the array of byte
+     * @param bitmap
+     * @return
+     */
     public byte[] getFileDataFromDrawable(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 80, byteArrayOutputStream);

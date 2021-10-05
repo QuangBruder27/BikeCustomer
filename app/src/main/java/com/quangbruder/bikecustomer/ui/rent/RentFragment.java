@@ -110,16 +110,6 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         binding = FragmentRentBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        //final TextView textView = binding.textGallery;
-        /*
-        rentViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-
-                //textView.setText(s);
-            }
-        });
-        */
 
         // Construct a PlacesClient
         Places.initialize(getContext(), getString(R.string.google_maps_key));
@@ -185,7 +175,12 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
     }
 
     //-------------------------------------------------------------------------
-    // find Routes by Using Google-Direction-Android
+
+    /**
+     * find routes by using Google-Direction-Android
+     * @param Begin
+     * @param End
+     */
     public void findRoutes(LatLng Begin, LatLng End) {
         if(Begin==null || End==null) {
             Toast.makeText(getContext(),"Unable to get location", Toast.LENGTH_LONG).show();
@@ -261,7 +256,12 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
 
     //------------------------------------------------------------------------------------
 
-
+    /**
+     * create parameters for function getBikeLocation()
+     * @param latitude
+     * @param longtitude
+     * @return
+     */
     public static Map<String,String> createParametersGetBikeLocation(String latitude, String longtitude){
         Map<String, String> result = new HashMap<String, String>();
         result.put("latitude",latitude);
@@ -269,7 +269,11 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         return result;
     }
 
-    // Send POST Request to get bikes nearby
+    /**
+     * Send POST Request to get bikes nearby
+     * @param params
+     * @param context
+     */
     public void getBikeLocations(Map<String, String> params, Context context){
         System.out.println("getBikeLocations Func");
         System.out.println("Parameter:"+params.size()+", "+params.toString());
@@ -310,7 +314,12 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         requestQueue.add(request);
     }
 
-    // Send POST Request to create the booking for rent a bike
+    /**
+     * Send POST Request to create the booking for rent a bike
+     * @param bikeId
+     * @param customerId
+     * @param context
+     */
     public void rentBike(String bikeId, String customerId, Context context){
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         JSONObject jsonObject = new JSONObject();
@@ -363,7 +372,12 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         requestQueue.add(request);
     }
 
-
+    /**
+     * create the list of bikes from the array of JSON objects
+     * @param jsonArray
+     * @return
+     * @throws JSONException
+     */
     public List<Bike> createListOfBikeFromJSonArray(JSONArray jsonArray) throws JSONException {
         List<Bike> result = new ArrayList<>();
         for (int a = 0; a < jsonArray.length(); a++) {
@@ -377,6 +391,11 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         return result;
     }
 
+    /**
+     *  create markers on the map from locations of bike
+     * @param list
+     * @return
+     */
     public List<MarkerOptions> createMarkerFromBikeLocation(List<Bike> list){
         List<MarkerOptions> listOfMarker = new ArrayList<>();
         for (Bike bike:list){
@@ -386,6 +405,13 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
         return listOfMarker;
     }
 
+    /**
+     * creater the marker
+     * @param bikeId
+     * @param latitude
+     * @param longtitude
+     * @return
+     */
     public MarkerOptions createMarker(String bikeId, String latitude, String longtitude){
         System.out.println("CREATE MARKER: "+latitude+", "+longtitude);
         return new MarkerOptions().title("Bike: "+bikeId)
@@ -394,6 +420,10 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
     }
 
 
+    /**
+     * add pointer on the map
+     * @param listOfMarker
+     */
     public void addPointer(List<MarkerOptions> listOfMarker){
         System.out.println("Add Pointer----------------------------------------------");
         for (MarkerOptions marker: listOfMarker){
@@ -477,6 +507,10 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
     // [END maps_current_place_update_location_ui]
 
 
+    /**
+     * create the dialog by click of the marker
+     * @param marker
+     */
     public void createDialog(Marker marker) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setMessage("Rent a bike\n"+marker.getTitle());
@@ -498,6 +532,7 @@ public class RentFragment extends Fragment implements OnMapReadyCallback, Routin
 
         builder.create().show();
     }
+
 
     public void createAlertDialogForPIN(String bikeId, String pin){
         // setup the alert builder
