@@ -2,17 +2,11 @@ package com.quangbruder.bikecustomer.ui.home;
 
 import static com.quangbruder.bikecustomer.help.Helper.retrieveRentBike;
 import static com.quangbruder.bikecustomer.help.Helper.retrieveRentPin;
-import static com.quangbruder.bikecustomer.help.Helper.retrieveRentStatus;
 import static com.quangbruder.bikecustomer.help.Helper.retrieveToken;
 import static com.quangbruder.bikecustomer.help.Helper.retrieveUserInfo;
 
 import android.animation.ObjectAnimator;
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,13 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.core.view.GestureDetectorCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -49,7 +38,6 @@ import com.quangbruder.bikecustomer.ui.rent.RentFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 

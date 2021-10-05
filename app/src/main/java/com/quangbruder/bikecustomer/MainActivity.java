@@ -4,8 +4,6 @@ import static com.quangbruder.bikecustomer.help.Helper.removeUserInfo;
 import static com.quangbruder.bikecustomer.help.Helper.retrieveUserInfo;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
