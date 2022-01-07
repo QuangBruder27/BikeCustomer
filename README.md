@@ -7,8 +7,13 @@ and getting the PIN to decrypt the bike. In addition all trips can be viewed in 
 <img src="img/xiaomi_login.jpg" width="200">
 Login layout
 
+
+
 <img src="img/xiaomi_home.jpg" width="200">
 Home layout
+
+
+
 
 <img src="img/xiaomi_route.jpg" width="200">
 Rent layout
