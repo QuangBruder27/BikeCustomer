@@ -5,3 +5,10 @@ First, the user can create a new account or log in using his e-mail and password
 and getting the PIN to decrypt the bike. In addition all trips can be viewed in the past.  In case of damage, the customer also has the customer also has the possibility to report the errors.
 
 <img src="img/xiaomi_login.jpg" width="200">
+Login layout
+
+<img src="img/xiaomi_home.jpg" width="200">
+Home layout
+
+<img src="img/xiaomi_route.jpg" width="200">
+Rent layout
