@@ -12,7 +12,7 @@
     <string name="menu_report">Report</string>
 
 
-    <string name="google_maps_key">AIzaSyDCl2jWQ63OJiLBeB5mgaKCWpi04xoyPqQ</string>
+    <string name="google_maps_key"></string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
